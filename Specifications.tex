@@ -1,0 +1,569 @@
+\documentclass[12pt,fleqn]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+\renewcommand\baselinestretch{1.0}
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+\title{Battleship}
+\author{Natalie Chin}
+
+\begin {document}
+
+\maketitle
+
+\newpage
+
+\section* {Constant Module}
+
+    \subsection*{Module}
+
+    Constant
+
+    \subsection* {Uses}
+
+    N/A
+
+    \subsection* {Syntax}
+
+    \subsubsection* {Exported Constants}
+
+    width = 8 \\
+    height = 8
+
+    \subsubsection* {Exported Access Programs}
+
+    \subsection* {Semantics}
+
+    \subsubsection* {State Variables}
+    None
+
+    \subsubsection* {State Invariant}
+    None
+
+    \subsubsection* {Assumptions}
+    None
+
+    \subsubsection* {Access Routine Semantics}
+    None
+
+    \newpage
+
+\section* {Coordinate Module}
+
+    \subsection* {Template Module}
+
+    Coordinate
+
+    \subsection* {Uses}
+    None
+
+    \subsection* {Syntax}
+    None
+
+    \subsubsection* {Exported Types}
+
+    Coordinate = (x,y)
+
+    \subsubsection* {Exported Access Programs}
+
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+    \hline
+    new Coordinate & real, real & Coordinate & ~\\
+    \hline
+    getX & ~ & real & ~\\
+    \hline
+    getY & ~ & real & ~\\
+    \hline
+    \end{tabular}
+
+    \subsection* {Semantics}
+
+    \subsubsection* {State Variables}
+
+    $x$: real\\
+    $y$: real
+
+    \subsubsection* {State Invariant}
+    None
+
+    \subsubsection* {Assumptions}
+    None
+
+    \subsubsection* {Access Routine Semantics}
+
+    \noindent new Coordinate (xc, yc):
+    \begin{itemize}
+    \item transition: $x, y := xc, yc$
+    \item output: $out := \mathit{self}$
+    \item exception: none
+    \end{itemize}
+
+    \noindent getX():
+    \begin{itemize}
+    \item transition: none 
+    \item output: $out := x$
+    \item exception: none
+    \end{itemize}
+
+    \noindent getY():
+    \begin{itemize}
+    \item transition: none
+    \item output: $out := y$
+    \item exception: none
+    \end{itemize}
+
+\subsubsection*{Local Functions}
+None
+
+\newpage
+
+\section* {Fleet Module}
+
+    \subsection* {Template Module}
+
+    Fleet
+
+    \subsection* {Uses}
+
+    Coordinate, Ships
+
+    \subsection* {Syntax}
+
+    \subsubsection* {Exported Types}
+
+    allShips : sequence of Ships
+
+    \subsubsection* {Exported Access Programs}
+
+    \begin{tabularx}{\linewidth}{|X|X|X|X|}
+    \hline
+    \textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+    \hline
+    new Fleet & ~ & Fleet & ~\\
+    \hline
+    getFleet & ~ & sequence of Ships & ~\\
+    \hline
+    addToFleet & integer, Coordinate, direction & ~ & DuplicateIDException, FullException\\
+    \hline
+
+    \end{tabularx}
+
+    \subsection* {Semantics}
+
+    \subsubsection* {State Variables}
+
+    $allShips$: sequence of Ships
+
+    \subsubsection* {State Invariant}
+
+    MAX\_SIZE = 5
+
+    \subsubsection* {Assumptions}
+    None
+
+    \subsubsection* {Access Routine Semantics}
+
+
+
+    \noindent new Fleet ():
+    \begin{itemize}
+    \item transition: $allShips$ = []
+    \item output: $out := \mathit{self}$
+    \item exception: none
+    \end{itemize}
+
+    \noindent getFleet():
+    \begin{itemize}
+    \item transition: none
+    \item output: $out := \mathit{self}$
+    \item exception: none
+    \end{itemize}
+
+    \noindent addToFleet(id, length, coord, direction):
+    \begin{itemize}
+    \item output: $out := !!!$
+    \item exception:  $exc := (iden(uid)) \Rightarrow  \mbox{DuplicateIDException} \lor allShips.size() == 5 \Rightarrow FullException $\\
+
+    \end{itemize}
+
+    \subsubsection*{Local Functions}
+
+    \noindent iden: real $\rightarrow$ boolean
+
+    \noindent iden($id$) $\equiv \exists (s : Ships | \mbox(s.getID() == id) : \mbox(self.getID() == id))$ \\
+
+    \noindent overlap: Coordinate $\rightarrow$ boolean 
+
+    \noindent overlap($id$) $\equiv  \exists (s : Ships | \mbox(s.getLoc() == Coordinate) : \mbox (s.getLoc() == Coordinate))$ \\
+
+    \noindent vertical: real $\times$ real $\times$ real  $\rightarrow$ boolean  
+
+    \noindent vertical($id$) $\equiv \exists (s : Ships | \mbox(s.getLoc() == Coordinate) : \mbox (s.getLoc() == Coordinate))$ \\
+
+    \noindent horizontal: real $\times$ real $\times$ real  $\rightarrow$ boolean  
+
+    \noindent horizontal ($id$) $\equiv \exists (s : Ships | \mbox(s.getLoc() == Coordinate) : \mbox (s.getLoc() == Coordinate))$ \\
+
+    \noindent withinBound: real  $\times$ Coordinate  $\rightarrow$ boolean  
+
+    \noindent withinBound($c$) $\equiv \exists c.getY() + length > Constants.height$ $\lor c.getX() + length > Constants.width$\\
+
+    \noindent zeroCheck: Coordinate $\rightarrow$ boolean  
+
+    \noindent zeroCheck($c$) $\equiv c.getX() < 0 || c.getY() < 0$ \\
+
+\newpage
+
+
+\section* {Game Module}
+
+    \subsection* {Template Module}
+
+    Game
+
+    \subsection* {Uses}
+
+    Gamefield
+
+    \subsection* {Syntax}
+
+    \subsubsection* {Exported Constants}
+    None
+
+    \subsubsection* {Exported Access Programs}
+
+
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+    \hline
+    new Game & real, real & Gamefield & ~\\
+    \hline
+
+    \end{tabular}
+
+    \subsection* {Semantics}
+
+    \subsubsection* {State Variables}
+    $player1$: Gamefield\\
+    $player2$: Gamefield
+
+    \subsubsection* {State Invariant}
+    None
+
+    \subsubsection* {Assumptions}
+    None
+
+\newpage
+
+\section* {Gamefield Module}
+
+    \subsection* {Module}
+
+    Gamefield
+
+    \subsection* {Uses}
+
+    Square, Ships, Coordinate, Fleet
+
+    \subsection* {Syntax}
+
+    \subsubsection* {Exported Constants}
+    None
+
+    \subsubsection* {Exported Access Programs}
+
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+    \hline
+    new GameField & real, real & Gamefield & ~\\
+    \hline
+    hitOrMiss & Coordinate & boolean & ~\\
+    \hline
+    printFleet & ~ &  & ~\\
+    \hline
+    addFleet & Fleet & ~ & ~\\
+    \hline
+
+    \end{tabular}
+
+    \subsection* {Semantics}
+
+    \subsubsection* {State Variables}
+    $board$: sequence of sequence of Square\\
+    $Fleet$: Fleet
+
+    \subsubsection* {State Invariant}
+    None
+
+    \subsubsection* {Assumptions}
+    None
+
+    \subsubsection* {Access Routine Semantics}
+
+    GameField(width, height):
+    \begin{itemize}
+    \item transition: $board := <<> >$ , $fleet := < >$
+    \item exception: none
+    \end{itemize}
+
+    hitOrMiss($c$):
+    \begin{itemize}
+    \item transition $\exists (c:\mbox{Coordinate} | \mbox{board[\mbox{c.getX()}][\mbox{c.getY()}].hasShip()}: \mbox{board[c.getX()][\mbox{c.getY().hasShip()}]})$    
+    \item exception: none 
+    \end{itemize}
+
+    addFleet($f$):
+    \begin{itemize}
+    \item transition: $s :=  \forall (s : Ships | s \in f.getFleet() : addShip(s.getID(),s.getLoc())$
+    \item exception:  none
+    \end{itemize}
+
+    \subsubsection*{Local Functions}
+    addShip: real $\times$ sequence of Coordinate $\rightarrow$ 
+
+    \noindent addShip($uid, c$) $\equiv \forall (\mbox{p: Coordinate} | (p \in  \mbox{c}): board[p.getX()][p.getY()].addShip(uid) \and [Ships(uid, loc)])$
+    ~\newline
+
+\newpage
+
+\section* {Ships Module}
+
+    \subsection* {Module}
+
+    Ships
+
+    \subsection* {Uses}
+
+    Coordinate
+
+    \subsection* {Syntax}
+
+    \subsubsection* {Exported Constants}
+    None
+
+    \subsubsection* {Exported Access Programs}
+
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+    \hline
+    new Ship & real, sequence of Coordinate & Ships & ~\\
+    \hline
+    getID & ~ & real & ~\\
+    \hline
+    getSunk & ~ & boolean & ~\\
+    \hline
+    getLoc & ~ & sequence of Coordinates & ~\\
+    \hline
+    doesOccupy & sequence of Coordinates & boolean & ~\\
+    \hline
+    setSunk & Coordinate & ~ & ~\\    
+    \hline
+
+    \hline
+
+    \end{tabular}
+
+    \subsection* {Semantics}
+
+    \subsubsection* {State Variables}
+    $uID$: real \\
+    $sunk$: boolean \\
+    $loc$: sequence of Coordinates \\
+    $sunk$: sequence of boolean
+
+    \subsubsection* {State Invariant}
+    None
+
+    \subsubsection* {Assumptions}
+    None
+
+    \subsubsection* {Access Routine Semantics}
+
+    Ships(uID, location):
+    \begin{itemize}
+    \item transition: $self.uID$ = uID, $self.sunk$ = False, $self.loc$ = location, $self.sunk$ = $< >$
+    \item exception: none
+    \end{itemize}
+
+    getID($c$):
+    \begin{itemize}
+    \item transition: none 
+    \item output: $self.uID$
+    \item exception: none 
+    \end{itemize}
+
+    getSunk($c$):
+    \begin{itemize}
+    \item transition: none 
+    \item output: $self.sunk$
+    \item exception: none 
+    \end{itemize}    
+
+    getLoc($c$):
+    \begin{itemize}
+    \item transition: none 
+    \item output: $self.loc$
+    \item exception: none 
+    \end{itemize}    
+
+    doesOccupy($loc$):
+    \begin{itemize}
+    \item transition: none  
+    \item output: helper(location)>=0
+    \item exception: none 
+    \end{itemize}        
+
+    setSunk($coord$):
+    \begin{itemize}
+    \item transition: $sunk[index] = True$
+    \item output: none 
+    \item exception: none 
+    \end{itemize}            
+
+    \subsubsection*{Local Functions}
+    helper: sequence of Coordinates $\rightarrow$ real
+
+    \noindent helper($location$) $\equiv \exists (c : Coordinate | c \in location : True)$
+    ~\newline
+
+    \noindent initSunk: self $\rightarrow$ self
+
+    \noindent initSunk($c$) $\equiv \exists (i : \mathbb{N}  | 0 \leq i \leq size(loc) : [False])$
+    ~\newline
+
+    \noindent isSunk: self $\rightarrow$ boolean 
+
+    \noindent isSunk() $\equiv (i : \mathbb{N} | 0 \leq i \leq size(loc) \and sunk[i] = False : False)$
+
+\newpage    
+
+
+\section* {Square Module}
+
+    \subsection* {Module}
+
+    Square
+
+    \subsection* {Uses}
+
+    Coordinate
+
+    \subsection* {Syntax}
+
+    \subsubsection* {Exported Constants}
+
+
+    \subsubsection* {Exported Access Programs}
+
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    \textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+    \hline
+    new Square & ~ & Square & ~\\
+    \hline
+    getGuessed & ~ & boolean & ~\\
+    \hline
+    setGuessed & boolean & ~ & ~\\
+    \hline
+    hasShip & ~ & boolean & ~\\
+    \hline
+    shipHit & ~ & ~ & ~\\
+    \hline
+    setID & real & ~ & ~\\    
+    \hline
+    getID & ~ & real & ~\\    
+    \hline
+
+    \hline
+
+    \end{tabular}
+
+    \subsection* {Semantics}
+
+    \subsubsection* {State Variables}
+    $guessed$: boolean\\
+    $hit$: boolean\\
+    $shipId$: real \\
+    $location$: sequence of Coordinates 
+
+    \subsubsection* {State Invariant}
+    None
+
+    \subsubsection* {Assumptions}
+    None
+
+    \subsubsection* {Access Routine Semantics}
+
+    Square (uID, location):
+    \begin{itemize}
+    \item transition: $self.guessed$, $self.hit$ = False, $self.shipID$ = None, $self.location$ = None
+    \item exception: none
+    \end{itemize}
+
+    getGuessed():
+    \begin{itemize}
+    \item transition: none 
+    \item output: $self.guessed$
+    \item exception: none 
+    \end{itemize}
+
+    setGuessed($c$):
+    \begin{itemize}
+    \item transition: $self.guessed$ = c
+    \item output: none
+    \item exception: none 
+    \end{itemize}    
+
+    hasShip():
+    \begin{itemize}
+    \item transition: none 
+    \item output: ! $self.shipID$ $\leq 0$ 
+    \item exception: none 
+    \end{itemize}    
+
+    addShip($id$):
+    \begin{itemize}
+    \item transition: $self.shipID$ = id
+    \item output: none
+    \item exception: none 
+    \end{itemize}        
+
+    shipHit():
+    \begin{itemize}
+    \item transition: $self.hit$ = True
+    \item output: none 
+    \item exception: none 
+    \end{itemize}            
+
+    getID():
+    \begin{itemize}
+    \item transition: none
+    \item output: $self.shipID$
+    \item exception: none 
+    \end{itemize}            
+
+
+    \subsubsection*{Local Functions}
+    None
+
+
+\end {document}
